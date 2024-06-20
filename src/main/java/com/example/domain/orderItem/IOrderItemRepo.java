@@ -1,4 +1,12 @@
 package com.example.domain.orderItem;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface IOrderItemRepo {
+    public List<OrderItem> getAllOrderItems();
+    public OrderItem createOrderItem(OrderItem orderItem);
+    public OrderItem getOrderItemById(UUID id);
+    public OrderItem updateOrderItem(UUID id, OrderItem orderItem);
+    public void deleteOrderItem(UUID id);
 }
