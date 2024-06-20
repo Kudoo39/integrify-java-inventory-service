@@ -1,45 +1,40 @@
-package com.example.infrastructure.supplier;
+package com.example.application.supplier;
 
 import com.example.domain.supplier.ISupplierRepo;
 import com.example.domain.supplier.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Repository
-public class SupplierRepo implements ISupplierRepo {
+@Service
+public class SupplierService implements ISupplierService {
     @Autowired
-    private ISupplierJpaRepo supplierRepo;
-
+    private ISupplierRepo supplierRepo;
 
     @Override
     public List<Supplier> getAllSuppliers() {
-        return supplierRepo.findAll();
+        return supplierRepo.getAllSuppliers();
     }
 
     @Override
     public Supplier createSupplier(Supplier supplier) {
-        return supplierRepo.save(supplier);
+        return supplierRepo.createSupplier(supplier);
     }
 
     @Override
     public Supplier getSupplierById(UUID id) {
-        return supplierRepo.findById(id).orElse(null);
+        return supplierRepo.getSupplierById(id);
     }
 
     @Override
     public Supplier updateSupplier(UUID id, Supplier supplier) {
-        if (supplierRepo.existsById(id)) {
-            supplier.setId(id);
-            return supplierRepo.save(supplier);
-        }
-        return null;
+        return supplierRepo.updateSupplier(id, supplier);
     }
 
     @Override
     public void deleteSupplier(UUID id) {
-        supplierRepo.deleteById(id);
+        supplierRepo.deleteSupplier(id);
     }
 }
