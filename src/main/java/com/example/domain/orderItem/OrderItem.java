@@ -11,6 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//@Table(name = "\"order-item\"")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

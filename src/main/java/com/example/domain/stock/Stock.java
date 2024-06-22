@@ -11,6 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//@Table(name = "\"stock\"")
 public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

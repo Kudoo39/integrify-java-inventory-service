@@ -10,6 +10,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//@Table(name = "\"supplier\"")
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -3,10 +3,12 @@ package com.example.application.stock;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class StockService implements IStockService{
     @Autowired
     private IStockRepo stockRepo;
