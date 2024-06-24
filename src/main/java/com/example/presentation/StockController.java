@@ -30,31 +30,19 @@ public class StockController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Stock> getStockById(@PathVariable UUID id) {
-        try {
-            Stock stock = stockService.getStockById(id);
-            return ResponseEntity.ok(stock);
-        } catch(Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Stock stock = stockService.getStockById(id);
+        return ResponseEntity.ok(stock);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Stock> updateStock(@PathVariable UUID id, @RequestBody Stock stock) {
-        try {
-            Stock updatedStock = stockService.updateStock(id, stock);
-            return ResponseEntity.ok(updatedStock);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Stock updatedStock = stockService.updateStock(id, stock);
+        return ResponseEntity.ok(updatedStock);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStock(@PathVariable UUID id) {
-        try {
-            stockService.deleteStock(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        stockService.deleteStock(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -30,31 +30,19 @@ public class OrderItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderItem> getOrderItemById(@PathVariable UUID id) {
-        try {
-            OrderItem orderItem = orderItemService.getOrderItemById(id);
-            return ResponseEntity.ok(orderItem);
-        } catch(Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        OrderItem orderItem = orderItemService.getOrderItemById(id);
+        return ResponseEntity.ok(orderItem);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderItem> updateOrder(@PathVariable UUID id, @RequestBody OrderItem orderItem) {
-        try {
-            OrderItem updatedOrderItem = orderItemService.updateOrderItem(id, orderItem);
-            return ResponseEntity.ok(updatedOrderItem);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        OrderItem updatedOrderItem = orderItemService.updateOrderItem(id, orderItem);
+        return ResponseEntity.ok(updatedOrderItem);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderItem(@PathVariable UUID id) {
-        try {
-            orderItemService.deleteOrderItem(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        orderItemService.deleteOrderItem(id);
+        return ResponseEntity.noContent().build();
     }
 }

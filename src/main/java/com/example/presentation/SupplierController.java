@@ -30,31 +30,19 @@ public class SupplierController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Supplier> getSupplierById(@PathVariable UUID id) {
-        try {
-            Supplier supplier = supplierService.getSupplierById(id);
-            return ResponseEntity.ok(supplier);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Supplier supplier = supplierService.getSupplierById(id);
+        return ResponseEntity.ok(supplier);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Supplier> updateSupplier(@PathVariable UUID id, @RequestBody Supplier supplier) {
-        try {
-            Supplier updatedSupplier = supplierService.updateSupplier(id, supplier);
-            return ResponseEntity.ok(updatedSupplier);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Supplier updatedSupplier = supplierService.updateSupplier(id, supplier);
+        return ResponseEntity.ok(updatedSupplier);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSupplier(@PathVariable UUID id) {
-        try {
-            supplierService.deleteSupplier(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        supplierService.deleteSupplier(id);
+        return ResponseEntity.noContent().build();
     }
 }
