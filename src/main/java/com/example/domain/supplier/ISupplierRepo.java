@@ -9,4 +9,6 @@ public interface ISupplierRepo {
     public Supplier getSupplierById(UUID id);
     public Supplier updateSupplier(UUID id, Supplier supplier);
     public void deleteSupplier(UUID id);
+
+
 }
