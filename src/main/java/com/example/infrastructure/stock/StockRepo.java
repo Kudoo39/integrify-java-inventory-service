@@ -11,34 +11,45 @@ import java.util.UUID;
 @Repository
 public class StockRepo implements IStockRepo {
     @Autowired
-    private IStockJpaRepo stockRepo;
+    private IStockJpaRepo stockJpaRepo;
 
     @Override
     public List<Stock> getAllStocks() {
-        return stockRepo.findAll();
+        return stockJpaRepo.findAll();
     }
 
     @Override
     public Stock getStockById(UUID id) {
-        return stockRepo.findById(id).orElse(null);
+        return stockJpaRepo.findById(id).orElse(null);
     }
 
     @Override
     public Stock createStock(Stock stock) {
-        return stockRepo.save(stock);
+        return stockJpaRepo.save(stock);
     }
 
     @Override
-    public Stock updateStock(UUID id, Stock stock) {
-        if (stockRepo.existsById(id)) {
-            stock.setId(id);
-            return stockRepo.save(stock);
-        }
-        return null;
+    public Stock updateStock(Stock stock) {
+        return stockJpaRepo.save(stock);
     }
 
     @Override
     public void deleteStock(UUID id) {
-        stockRepo.deleteById(id);
+        stockJpaRepo.deleteById(id);
     }
+
+    @Override
+    public List<Stock> getStocksBySupplier(UUID supplierId) {
+        return stockJpaRepo.getStocksBySupplier(supplierId);
+    }
+
+    @Override
+    public List<Stock> getStocksByProductIdentifier(String productIdentifier) {
+        return stockJpaRepo.getStocksByProductIdentifier(productIdentifier);
+    };
+
+    @Override
+    public List<Stock> getLowStockAlerts(int threshold) {
+        return stockJpaRepo.getLowStockAlerts(threshold);
+    };
 }

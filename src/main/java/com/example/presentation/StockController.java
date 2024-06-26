@@ -45,4 +45,22 @@ public class StockController {
         stockService.deleteStock(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/supplier/{supplierId}")
+    public ResponseEntity<List<Stock>> getStocksBySupplier(@PathVariable UUID supplierId) {
+        List<Stock> stocks = stockService.getStocksBySupplier(supplierId);
+        return ResponseEntity.ok(stocks);
+    }
+
+    @GetMapping("/product/{productIdentifier}")
+    public ResponseEntity<List<Stock>> getStocksByProductIdentifier(@PathVariable String productIdentifier) {
+        List<Stock> stocks = stockService.getStocksByProductIdentifier(productIdentifier);
+        return ResponseEntity.ok(stocks);
+    }
+
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<Stock>> getLowStockAlerts(@RequestParam int threshold) {
+        List<Stock> lowStockItems = stockService.getLowStockAlerts(threshold);
+        return ResponseEntity.ok(lowStockItems);
+    }
 }

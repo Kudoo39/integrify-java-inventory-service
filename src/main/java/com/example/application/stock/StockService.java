@@ -3,6 +3,8 @@ package com.example.application.stock;
 import com.example.domain.order.Order;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
+import com.example.domain.supplier.ISupplierRepo;
+import com.example.domain.supplier.Supplier;
 import com.example.exception.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class StockService implements IStockService{
     @Autowired
     private IStockRepo stockRepo;
 
+    @Autowired
+    private ISupplierRepo supplierRepo;
+
     @Override
     public List<Stock> getAllStocks() {
         return stockRepo.getAllStocks();
@@ -22,6 +27,11 @@ public class StockService implements IStockService{
 
     @Override
     public Stock createStock(Stock stock) {
+        UUID supplierId = stock.getSupplier().getId();
+        Supplier supplier = supplierRepo.getSupplierById(supplierId);
+        if (supplier == null) {
+            throw new ResourceNotFound("Supplier not found with id: " + supplierId);
+        }
         return stockRepo.createStock(stock);
     }
 
@@ -40,7 +50,17 @@ public class StockService implements IStockService{
         if (existingStock == null) {
             throw new ResourceNotFound("Stock not found with id: " + id);
         }
-        return stockRepo.updateStock(id, stock);
+        existingStock.setProductIdentifier(stock.getProductIdentifier());
+        existingStock.setQuantity(stock.getQuantity());
+
+        UUID supplierId = stock.getSupplier().getId();
+        Supplier supplier = supplierRepo.getSupplierById(supplierId);
+        if (supplier == null) {
+            throw new ResourceNotFound("Supplier not found with id: " + supplierId);
+        }
+        existingStock.setSupplier(supplier);
+
+        return stockRepo.updateStock(existingStock);
     }
 
     @Override
@@ -50,5 +70,20 @@ public class StockService implements IStockService{
             throw new ResourceNotFound("Stock not found with id: " + id);
         }
         stockRepo.deleteStock(id);
+    }
+
+    @Override
+    public List<Stock> getStocksBySupplier(UUID supplierId) {
+        return stockRepo.getStocksBySupplier(supplierId);
+    }
+
+    @Override
+    public List<Stock> getStocksByProductIdentifier(String productIdentifier) {
+        return stockRepo.getStocksByProductIdentifier(productIdentifier);
+    }
+
+    @Override
+    public List<Stock> getLowStockAlerts(int threshold) {
+        return stockRepo.getLowStockAlerts(threshold);
     }
 }
