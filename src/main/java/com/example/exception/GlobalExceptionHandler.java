@@ -45,4 +45,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleConflictException(Conflict ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(OutOfStock.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ResponseEntity<String> handleOutOfStockException(OutOfStock ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 }

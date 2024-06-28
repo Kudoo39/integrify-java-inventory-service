@@ -50,7 +50,7 @@ public class StockService implements IStockService{
         if (existingStock == null) {
             throw new ResourceNotFound("Stock not found with id: " + id);
         }
-        existingStock.setProductIdentifier(stock.getProductIdentifier());
+        existingStock.setProductId(stock.getProductId());
         existingStock.setQuantity(stock.getQuantity());
 
         UUID supplierId = stock.getSupplier().getId();
@@ -73,13 +73,13 @@ public class StockService implements IStockService{
     }
 
     @Override
-    public List<Stock> getStocksBySupplier(UUID supplierId) {
-        return stockRepo.getStocksBySupplier(supplierId);
+    public List<Stock> getStocksBySupplierId(UUID supplierId) {
+        return stockRepo.getStocksBySupplierId(supplierId);
     }
 
     @Override
-    public List<Stock> getStocksByProductIdentifier(String productIdentifier) {
-        return stockRepo.getStocksByProductIdentifier(productIdentifier);
+    public List<Stock> getStocksByProductId(UUID productId) {
+        return stockRepo.getStocksByProductId(productId);
     }
 
     @Override

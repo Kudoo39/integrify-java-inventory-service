@@ -11,7 +11,7 @@ public interface IStockService {
     public Stock getStockById(UUID id);
     public Stock updateStock(UUID id, Stock stock);
     public void deleteStock(UUID id);
-    public List<Stock> getStocksBySupplier(UUID supplierId);
-    public List<Stock> getStocksByProductIdentifier(String productIdentifier);
+    public List<Stock> getStocksBySupplierId(UUID supplierId);
+    public List<Stock> getStocksByProductId(UUID productId);
     public List<Stock> getLowStockAlerts(int threshold);
 }

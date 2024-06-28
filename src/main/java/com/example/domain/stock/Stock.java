@@ -18,8 +18,8 @@ public class Stock {
     @Column(nullable = false)
     private UUID id;
 
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
-    private String productIdentifier;
+    @Column(nullable = false)
+    private UUID productId;
 
     @Column(nullable = false)
     private int quantity;

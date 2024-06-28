@@ -1,10 +1,12 @@
 package com.example.domain.order;
 
+import com.example.domain.orderItem.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 import com.example.domain.supplier.Supplier;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,4 +31,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
+
+    @Transient
+    private List<OrderItem> orderItems;
 }

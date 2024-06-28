@@ -47,14 +47,14 @@ public class StockController {
     }
 
     @GetMapping("/supplier/{supplierId}")
-    public ResponseEntity<List<Stock>> getStocksBySupplier(@PathVariable UUID supplierId) {
-        List<Stock> stocks = stockService.getStocksBySupplier(supplierId);
+    public ResponseEntity<List<Stock>> getStocksBySupplierId(@PathVariable UUID supplierId) {
+        List<Stock> stocks = stockService.getStocksBySupplierId(supplierId);
         return ResponseEntity.ok(stocks);
     }
 
-    @GetMapping("/product/{productIdentifier}")
-    public ResponseEntity<List<Stock>> getStocksByProductIdentifier(@PathVariable String productIdentifier) {
-        List<Stock> stocks = stockService.getStocksByProductIdentifier(productIdentifier);
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<List<Stock>> getStocksByProductId(@PathVariable UUID productId) {
+        List<Stock> stocks = stockService.getStocksByProductId(productId);
         return ResponseEntity.ok(stocks);
     }
 
