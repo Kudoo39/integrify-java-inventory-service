@@ -19,6 +19,9 @@ public class OrderItem {
     private UUID id;
 
     @Column(nullable = false)
+    private UUID productId;
+
+    @Column(nullable = false)
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -39,13 +39,13 @@ public class StockRepo implements IStockRepo {
     }
 
     @Override
-    public List<Stock> getStocksBySupplier(UUID supplierId) {
-        return stockJpaRepo.getStocksBySupplier(supplierId);
+    public List<Stock> getStocksBySupplierId(UUID supplierId) {
+        return stockJpaRepo.getStocksBySupplierId(supplierId);
     }
 
     @Override
-    public List<Stock> getStocksByProductIdentifier(String productIdentifier) {
-        return stockJpaRepo.getStocksByProductIdentifier(productIdentifier);
+    public List<Stock> getStocksByProductId(UUID getStocksByProductId) {
+        return stockJpaRepo.getStocksByProductId(getStocksByProductId);
     };
 
     @Override
