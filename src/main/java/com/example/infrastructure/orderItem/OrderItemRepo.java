@@ -1,44 +1,58 @@
 package com.example.infrastructure.orderItem;
 
+import com.example.application.dtos.OrderItemMapper;
+import com.example.application.dtos.orderItemDto.OrderItemReadDto;
 import com.example.domain.orderItem.IOrderItemRepo;
 import com.example.domain.orderItem.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 public class OrderItemRepo implements IOrderItemRepo {
     @Autowired
-    private IOrderItemJpaRepo orderItemRepo;
+    private IOrderItemJpaRepo orderItemJpaRepo;
+
+    @Autowired
+    private OrderItemMapper orderItemMapper;
 
     @Override
-    public List<OrderItem> getAllOrderItems() {
-        return orderItemRepo.findAll();
+    public List<OrderItemReadDto> getAllOrderItems() {
+        List<OrderItem> orderItems = orderItemJpaRepo.findAll();
+        List<OrderItemReadDto> orderItemDtos = new ArrayList<>();
+
+        for (OrderItem orderItem : orderItems) {
+            OrderItemReadDto orderItemDto = orderItemMapper.toOrderItemRead(orderItem);
+            orderItemDtos.add(orderItemDto);
+        }
+
+        return orderItemDtos;
     }
 
     @Override
     public OrderItem getOrderItemById(UUID id) {
-        return orderItemRepo.findById(id).orElse(null);
+        return orderItemJpaRepo.findById(id).orElse(null);
     }
 
     @Override
     public OrderItem createOrderItem(OrderItem orderItem) {
-        return orderItemRepo.save(orderItem);
+        return orderItemJpaRepo.save(orderItem);
     }
 
     @Override
     public OrderItem updateOrderItem(UUID id, OrderItem orderItem) {
-        if (orderItemRepo.existsById(id)) {
+        if (orderItemJpaRepo.existsById(id)) {
             orderItem.setId(id);
-            return orderItemRepo.save(orderItem);
+            return orderItemJpaRepo.save(orderItem);
         }
         return null;
     }
 
     @Override
     public void deleteOrderItem(UUID id) {
-        orderItemRepo.deleteById(id);
+        orderItemJpaRepo.deleteById(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.application.stock;
 
+import com.example.application.dtos.stockDto.StockReadDto;
 import com.example.domain.order.Order;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
@@ -21,7 +22,7 @@ public class StockService implements IStockService{
     private ISupplierRepo supplierRepo;
 
     @Override
-    public List<Stock> getAllStocks() {
+    public List<StockReadDto> getAllStocks() {
         return stockRepo.getAllStocks();
     }
 

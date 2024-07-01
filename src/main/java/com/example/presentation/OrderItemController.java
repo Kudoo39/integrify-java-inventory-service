@@ -1,5 +1,6 @@
 package com.example.presentation;
 
+import com.example.application.dtos.orderItemDto.OrderItemReadDto;
 import com.example.application.orderItem.IOrderItemService;
 import com.example.domain.orderItem.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class OrderItemController {
     private IOrderItemService orderItemService;
 
     @GetMapping
-    public ResponseEntity<List<OrderItem>> getAllOrderItems() {
-        List<OrderItem> orderItems = orderItemService.getAllOrderItems();
+    public ResponseEntity<List<OrderItemReadDto>> getAllOrderItems() {
+        List<OrderItemReadDto> orderItems = orderItemService.getAllOrderItems();
         return ResponseEntity.ok(orderItems);
     }
 

@@ -1,5 +1,7 @@
 package com.example.application.supplier;
 
+import com.example.application.dtos.supplierDto.SupplierCreateDto;
+import com.example.application.dtos.supplierDto.SupplierReadDto;
 import com.example.domain.supplier.ISupplierRepo;
 import com.example.domain.supplier.Supplier;
 import com.example.exception.customException.ResourceNotFound;
@@ -15,12 +17,12 @@ public class SupplierService implements ISupplierService {
     private ISupplierRepo supplierRepo;
 
     @Override
-    public List<Supplier> getAllSuppliers() {
+    public List<SupplierReadDto> getAllSuppliers() {
         return supplierRepo.getAllSuppliers();
     }
 
     @Override
-    public Supplier createSupplier(Supplier supplier) {
+    public SupplierCreateDto createSupplier(SupplierCreateDto supplier) {
         return supplierRepo.createSupplier(supplier);
     }
 

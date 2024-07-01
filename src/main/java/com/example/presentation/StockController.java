@@ -1,5 +1,6 @@
 package com.example.presentation;
 
+import com.example.application.dtos.stockDto.StockReadDto;
 import com.example.application.stock.IStockService;
 import com.example.domain.stock.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class StockController {
     private IStockService stockService;
 
     @GetMapping
-    public ResponseEntity<List<Stock>> getAllStocks() {
-        List<Stock> stocks = stockService.getAllStocks();
+    public ResponseEntity<List<StockReadDto>> getAllStocks() {
+        List<StockReadDto> stocks = stockService.getAllStocks();
         return ResponseEntity.ok(stocks);
     }
 

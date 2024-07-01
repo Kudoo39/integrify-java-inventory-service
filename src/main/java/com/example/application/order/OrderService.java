@@ -1,5 +1,6 @@
 package com.example.application.order;
 
+import com.example.application.dtos.orderDto.OrderReadDto;
 import com.example.domain.order.IOrderRepo;
 import com.example.domain.order.Order;
 import com.example.domain.orderItem.OrderItem;
@@ -22,7 +23,7 @@ public class OrderService implements IOrderService{
     private IStockRepo stockRepo;
 
     @Override
-    public List<Order> getAllOrders() {
+    public List<OrderReadDto> getAllOrders() {
         return orderRepo.getAllOrders();
     }
 

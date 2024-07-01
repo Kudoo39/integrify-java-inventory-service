@@ -1,5 +1,7 @@
 package com.example.presentation;
 
+import com.example.application.dtos.supplierDto.SupplierCreateDto;
+import com.example.application.dtos.supplierDto.SupplierReadDto;
 import com.example.application.supplier.ISupplierService;
 import com.example.domain.supplier.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,14 @@ public class SupplierController {
     private ISupplierService supplierService;
 
     @GetMapping
-    public ResponseEntity<List<Supplier>> getAllSuppliers() {
-        List<Supplier> suppliers = supplierService.getAllSuppliers();
+    public ResponseEntity<List<SupplierReadDto>> getAllSuppliers() {
+        List<SupplierReadDto> suppliers = supplierService.getAllSuppliers();
         return ResponseEntity.ok(suppliers);
     }
 
     @PostMapping
-    public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplier) {
-        Supplier createdSupplier = supplierService.createSupplier(supplier);
+    public ResponseEntity<SupplierCreateDto> createSupplier(@RequestBody SupplierCreateDto supplier) {
+        SupplierCreateDto createdSupplier = supplierService.createSupplier(supplier);
         // ResponseEntity.created
         return ResponseEntity.ok(createdSupplier);
     }
