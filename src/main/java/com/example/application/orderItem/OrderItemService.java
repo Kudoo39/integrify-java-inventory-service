@@ -1,5 +1,7 @@
 package com.example.application.orderItem;
 
+import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
+import com.example.application.dtos.orderItemDto.OrderItemReadDto;
 import com.example.domain.orderItem.IOrderItemRepo;
 import com.example.domain.orderItem.OrderItem;
 import com.example.exception.customException.ResourceNotFound;
@@ -15,7 +17,7 @@ public class OrderItemService implements IOrderItemService {
     private IOrderItemRepo orderItemRepo;
 
     @Override
-    public List<OrderItem> getAllOrderItems() {
+    public List<OrderItemReadDto> getAllOrderItems() {
         return orderItemRepo.getAllOrderItems();
     }
 

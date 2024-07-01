@@ -1,12 +1,13 @@
 package com.example.application.stock;
 
+import com.example.application.dtos.stockDto.StockReadDto;
 import com.example.domain.stock.Stock;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface IStockService {
-    public List<Stock> getAllStocks();
+    public List<StockReadDto> getAllStocks();
     public Stock createStock(Stock stock);
     public Stock getStockById(UUID id);
     public Stock updateStock(UUID id, Stock stock);
