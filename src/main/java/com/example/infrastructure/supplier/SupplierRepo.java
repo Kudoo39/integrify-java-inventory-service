@@ -3,8 +3,10 @@ package com.example.infrastructure.supplier;
 import com.example.application.dtos.SupplierMapper;
 import com.example.application.dtos.supplierDto.SupplierCreateDto;
 import com.example.application.dtos.supplierDto.SupplierReadDto;
+import com.example.application.dtos.supplierDto.SupplierUpdateDto;
 import com.example.domain.supplier.ISupplierRepo;
 import com.example.domain.supplier.Supplier;
+import com.example.exception.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,17 +43,22 @@ public class SupplierRepo implements ISupplierRepo {
     }
 
     @Override
-    public Supplier getSupplierById(UUID id) {
-        return supplierJpaRepo.findById(id).orElse(null);
+    public SupplierReadDto getSupplierById(UUID id) {
+        Supplier supplier = supplierJpaRepo.findById(id).orElse(null);
+        SupplierReadDto supplierDto = supplierMapper.toSupplierRead(supplier);
+        return supplierDto;
     }
 
     @Override
-    public Supplier updateSupplier(UUID id, Supplier supplier) {
-        if (supplierJpaRepo.existsById(id)) {
-            supplier.setId(id);
-            return supplierJpaRepo.save(supplier);
-        }
-        return null;
+    public SupplierReadDto updateSupplier(UUID id, SupplierUpdateDto supplierDto) {
+        Supplier existingSupplier = supplierJpaRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Supplier not found with id: " + id));
+
+        supplierMapper.updateSupplierFromDto(supplierDto, existingSupplier);
+
+        Supplier savedSupplier = supplierJpaRepo.save(existingSupplier);
+
+        return supplierMapper.toSupplierRead(savedSupplier);
     }
 
     @Override

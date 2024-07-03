@@ -2,8 +2,9 @@ package com.example.presentation;
 
 import com.example.application.dtos.supplierDto.SupplierCreateDto;
 import com.example.application.dtos.supplierDto.SupplierReadDto;
+import com.example.application.dtos.supplierDto.SupplierUpdateDto;
 import com.example.application.supplier.ISupplierService;
-import com.example.domain.supplier.Supplier;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +25,21 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<SupplierCreateDto> createSupplier(@RequestBody SupplierCreateDto supplier) {
+    public ResponseEntity<SupplierCreateDto> createSupplier(@RequestBody @Valid SupplierCreateDto supplier) {
         SupplierCreateDto createdSupplier = supplierService.createSupplier(supplier);
         // ResponseEntity.created
         return ResponseEntity.ok(createdSupplier);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Supplier> getSupplierById(@PathVariable UUID id) {
-        Supplier supplier = supplierService.getSupplierById(id);
+    public ResponseEntity<SupplierReadDto> getSupplierById(@PathVariable UUID id) {
+        SupplierReadDto supplier = supplierService.getSupplierById(id);
         return ResponseEntity.ok(supplier);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Supplier> updateSupplier(@PathVariable UUID id, @RequestBody Supplier supplier) {
-        Supplier updatedSupplier = supplierService.updateSupplier(id, supplier);
+    public ResponseEntity<SupplierReadDto> updateSupplier(@PathVariable UUID id, @RequestBody @Valid SupplierUpdateDto supplier) {
+        SupplierReadDto updatedSupplier = supplierService.updateSupplier(id, supplier);
         return ResponseEntity.ok(updatedSupplier);
     }
 
