@@ -1,14 +1,40 @@
 package com.example.exception;
 
 import com.example.exception.customException.*;
+import com.example.exception.shared.ErrorEntity;
+import com.example.exception.shared.ErrorResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponseEntity> handleValidationExceptions(MethodArgumentNotValidException ex) {
+
+        List<ErrorEntity> errors = new ArrayList<>();
+        for (FieldError fieldError: ex.getBindingResult().getFieldErrors()) {
+            ErrorEntity errorEntity = new ErrorEntity();
+            errorEntity.setField(fieldError.getField());
+            errorEntity.setMessage(fieldError.getField() + " " + fieldError.getDefaultMessage());
+
+            errors.add(errorEntity);
+        }
+
+        ErrorResponseEntity errorResponseEntity = new ErrorResponseEntity();
+        errorResponseEntity.setErrors(errors);
+
+        return new ResponseEntity<>(errorResponseEntity, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> handleAllExceptions(Exception ex) {

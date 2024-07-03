@@ -1,11 +1,10 @@
 package com.example.application.stock;
 
 import com.example.application.dtos.stockDto.StockReadDto;
-import com.example.domain.order.Order;
+import com.example.application.dtos.supplierDto.SupplierReadDto;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
 import com.example.domain.supplier.ISupplierRepo;
-import com.example.domain.supplier.Supplier;
 import com.example.exception.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class StockService implements IStockService{
     @Override
     public Stock createStock(Stock stock) {
         UUID supplierId = stock.getSupplier().getId();
-        Supplier supplier = supplierRepo.getSupplierById(supplierId);
+        SupplierReadDto supplier = supplierRepo.getSupplierById(supplierId);
         if (supplier == null) {
             throw new ResourceNotFound("Supplier not found with id: " + supplierId);
         }
@@ -53,13 +52,6 @@ public class StockService implements IStockService{
         }
         existingStock.setProductId(stock.getProductId());
         existingStock.setQuantity(stock.getQuantity());
-
-        UUID supplierId = stock.getSupplier().getId();
-        Supplier supplier = supplierRepo.getSupplierById(supplierId);
-        if (supplier == null) {
-            throw new ResourceNotFound("Supplier not found with id: " + supplierId);
-        }
-        existingStock.setSupplier(supplier);
 
         return stockRepo.updateStock(existingStock);
     }
