@@ -1,8 +1,6 @@
-package com.example.exception;
+package com.example.presentation.shared;
 
-import com.example.exception.customException.*;
-import com.example.exception.shared.ErrorEntity;
-import com.example.exception.shared.ErrorResponseEntity;
+import com.example.presentation.customException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

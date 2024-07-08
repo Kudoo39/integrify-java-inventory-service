@@ -6,7 +6,7 @@ import com.example.application.dtos.supplierDto.SupplierReadDto;
 import com.example.application.dtos.supplierDto.SupplierUpdateDto;
 import com.example.domain.supplier.ISupplierRepo;
 import com.example.domain.supplier.Supplier;
-import com.example.exception.customException.ResourceNotFound;
+import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,11 @@
 package com.example.presentation;
 
+import com.example.application.dtos.stockDto.StockCreateDto;
 import com.example.application.dtos.stockDto.StockReadDto;
+import com.example.application.dtos.stockDto.StockUpdateDto;
 import com.example.application.stock.IStockService;
 import com.example.domain.stock.Stock;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,8 @@ public class StockController {
     }
 
     @PostMapping
-    public ResponseEntity<Stock> createStock(@RequestBody Stock stock) {
-        Stock createdStock = stockService.createStock(stock);
+    public ResponseEntity<StockCreateDto> createStock(@RequestBody @Valid StockCreateDto stock) {
+        StockCreateDto createdStock = stockService.createStock(stock);
         // created
         return ResponseEntity.ok(createdStock);
     }
@@ -36,8 +39,8 @@ public class StockController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Stock> updateStock(@PathVariable UUID id, @RequestBody Stock stock) {
-        Stock updatedStock = stockService.updateStock(id, stock);
+    public ResponseEntity<StockReadDto> updateStock(@PathVariable UUID id, @RequestBody @Valid StockUpdateDto stock) {
+        StockReadDto updatedStock = stockService.updateStock(id, stock);
         return ResponseEntity.ok(updatedStock);
     }
 

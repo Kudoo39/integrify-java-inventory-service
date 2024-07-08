@@ -1,13 +1,17 @@
 package com.example.application.order;
 
+import com.example.application.dtos.StockMapper;
+import com.example.application.dtos.orderDto.OrderCreateDto;
 import com.example.application.dtos.orderDto.OrderReadDto;
+import com.example.application.dtos.orderDto.OrderUpdateDto;
+import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
 import com.example.domain.order.IOrderRepo;
 import com.example.domain.order.Order;
 import com.example.domain.orderItem.OrderItem;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
-import com.example.exception.customException.OutOfStock;
-import com.example.exception.customException.ResourceNotFound;
+import com.example.presentation.customException.OutOfStock;
+import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +26,17 @@ public class OrderService implements IOrderService{
     @Autowired
     private IStockRepo stockRepo;
 
+    @Autowired
+    private StockMapper stockMapper;
+
     @Override
     public List<OrderReadDto> getAllOrders() {
         return orderRepo.getAllOrders();
     }
 
     @Override
-    public Order createOrder(Order order) {
-        for (OrderItem item : order.getOrderItems()) {
+    public OrderCreateDto createOrder(OrderCreateDto order) {
+        for (OrderItemCreateDto item : order.getOrderItems()) {
             Stock stock = stockRepo.getStockById(item.getProductId());
             if (stock == null) {
                 throw new ResourceNotFound("Product not found with id: " + item.getProductId());
@@ -38,7 +45,7 @@ public class OrderService implements IOrderService{
                 throw new OutOfStock("Insufficient stock for product id: " + item.getProductId());
             }
             stock.setQuantity(stock.getQuantity() - item.getQuantity());
-            stockRepo.updateStock(stock);
+            stockRepo.updateStock(stock.getId(), stockMapper.toStockUpdate(stock));
         }
         return orderRepo.createOrder(order);
     }
@@ -53,7 +60,7 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public Order updateOrder(UUID id, Order order) {
+    public OrderReadDto updateOrder(UUID id, OrderUpdateDto order) {
         Order existingOrder = orderRepo.getOrderById(id);
         if (existingOrder == null) {
             throw new ResourceNotFound("Order not found with id: " + id);

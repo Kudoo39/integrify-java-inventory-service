@@ -2,9 +2,10 @@ package com.example.application.orderItem;
 
 import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
 import com.example.application.dtos.orderItemDto.OrderItemReadDto;
+import com.example.application.dtos.orderItemDto.OrderItemUpdateDto;
 import com.example.domain.orderItem.IOrderItemRepo;
 import com.example.domain.orderItem.OrderItem;
-import com.example.exception.customException.ResourceNotFound;
+import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public OrderItem createOrderItem(OrderItem orderItem) {
+    public OrderItemCreateDto createOrderItem(OrderItemCreateDto orderItem) {
         return orderItemRepo.createOrderItem(orderItem);
     }
 
@@ -36,7 +37,7 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public OrderItem updateOrderItem(UUID id, OrderItem orderItem) {
+    public OrderItemReadDto updateOrderItem(UUID id, OrderItemUpdateDto orderItem) {
         OrderItem existingOrderItem = orderItemRepo.getOrderItemById(id);
         if (existingOrderItem == null) {
             throw new ResourceNotFound("OrderItem not found with id: " + id);

@@ -1,8 +1,11 @@
 package com.example.presentation;
 
+import com.example.application.dtos.orderDto.OrderCreateDto;
 import com.example.application.dtos.orderDto.OrderReadDto;
+import com.example.application.dtos.orderDto.OrderUpdateDto;
 import com.example.application.order.IOrderService;
 import com.example.domain.order.Order;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.createOrder(order);
+    public ResponseEntity<OrderCreateDto> createOrder(@RequestBody @Valid OrderCreateDto order) {
+        OrderCreateDto createdOrder = orderService.createOrder(order);
         // created
         return ResponseEntity.ok(createdOrder);
     }
@@ -36,8 +39,8 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable UUID id, @RequestBody Order order) {
-        Order updatedOrder = orderService.updateOrder(id, order);
+    public ResponseEntity<OrderReadDto> updateOrder(@PathVariable UUID id, @RequestBody @Valid OrderUpdateDto order) {
+        OrderReadDto updatedOrder = orderService.updateOrder(id, order);
         return ResponseEntity.ok(updatedOrder);
     }
 

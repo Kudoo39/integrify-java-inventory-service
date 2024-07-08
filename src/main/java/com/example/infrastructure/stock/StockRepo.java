@@ -1,9 +1,12 @@
 package com.example.infrastructure.stock;
 
 import com.example.application.dtos.StockMapper;
+import com.example.application.dtos.stockDto.StockCreateDto;
 import com.example.application.dtos.stockDto.StockReadDto;
+import com.example.application.dtos.stockDto.StockUpdateDto;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
+import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -38,13 +41,22 @@ public class StockRepo implements IStockRepo {
     }
 
     @Override
-    public Stock createStock(Stock stock) {
-        return stockJpaRepo.save(stock);
+    public StockCreateDto createStock(StockCreateDto incomingStock) {
+        Stock stock = stockMapper.toStock(incomingStock);
+        Stock savedStock = stockJpaRepo.save(stock);
+        return stockMapper.toStockCreate(savedStock);
     }
 
     @Override
-    public Stock updateStock(Stock stock) {
-        return stockJpaRepo.save(stock);
+    public StockReadDto updateStock(UUID id, StockUpdateDto incomingStock) {
+        Stock existingStock = stockJpaRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Stock not found with id: " + id));
+
+        stockMapper.updateStockFromDto(incomingStock, existingStock);
+
+        Stock savedStock = stockJpaRepo.save(existingStock);
+
+        return stockMapper.toStockRead(savedStock);
     }
 
     @Override

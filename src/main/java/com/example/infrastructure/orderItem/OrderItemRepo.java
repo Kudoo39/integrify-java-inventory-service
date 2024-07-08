@@ -1,9 +1,12 @@
 package com.example.infrastructure.orderItem;
 
 import com.example.application.dtos.OrderItemMapper;
+import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
 import com.example.application.dtos.orderItemDto.OrderItemReadDto;
+import com.example.application.dtos.orderItemDto.OrderItemUpdateDto;
 import com.example.domain.orderItem.IOrderItemRepo;
 import com.example.domain.orderItem.OrderItem;
+import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -38,17 +41,22 @@ public class OrderItemRepo implements IOrderItemRepo {
     }
 
     @Override
-    public OrderItem createOrderItem(OrderItem orderItem) {
-        return orderItemJpaRepo.save(orderItem);
+    public OrderItemCreateDto createOrderItem(OrderItemCreateDto incomingOrderItem) {
+        OrderItem orderItem = orderItemMapper.toOrderItem(incomingOrderItem);
+        OrderItem savedOrderItem = orderItemJpaRepo.save(orderItem);
+        return orderItemMapper.toOrderItemCreate(savedOrderItem);
     }
 
     @Override
-    public OrderItem updateOrderItem(UUID id, OrderItem orderItem) {
-        if (orderItemJpaRepo.existsById(id)) {
-            orderItem.setId(id);
-            return orderItemJpaRepo.save(orderItem);
-        }
-        return null;
+    public OrderItemReadDto updateOrderItem(UUID id, OrderItemUpdateDto incomingOrderItem) {
+        OrderItem existingOrderItem = orderItemJpaRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("OrderItem not found with id: " + id));
+
+        orderItemMapper.updateOrderItemFromDto(incomingOrderItem, existingOrderItem);
+
+        OrderItem savedOrderItem = orderItemJpaRepo.save(existingOrderItem);
+
+        return orderItemMapper.toOrderItemRead(savedOrderItem);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.presentation.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,16 +21,9 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     private String apiKey;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        String requestPath = request.getRequestURI();
+        String authHeaders = request.getHeader("Authorization");
 
-        if (requestPath.startsWith("/api/stocks") && "GET".equalsIgnoreCase(request.getMethod())) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String hasKeyHeader = request.getHeader("Authorization");
-
-        if(hasKeyHeader == null || !hasKeyHeader.equals(apiKey)){
+        if(authHeaders == null || !authHeaders.equals(apiKey)){
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.getWriter().write("Unauthorized");
             return;
