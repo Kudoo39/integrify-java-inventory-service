@@ -1,9 +1,12 @@
 package com.example.infrastructure.order;
 
 import com.example.application.dtos.OrderMapper;
+import com.example.application.dtos.orderDto.OrderCreateDto;
 import com.example.application.dtos.orderDto.OrderReadDto;
+import com.example.application.dtos.orderDto.OrderUpdateDto;
 import com.example.domain.order.IOrderRepo;
 import com.example.domain.order.Order;
+import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -38,17 +41,22 @@ public class OrderRepo implements IOrderRepo {
     }
 
     @Override
-    public Order createOrder(Order order) {
-        return orderJpaRepo.save(order);
+    public OrderCreateDto createOrder(OrderCreateDto incomingOrder) {
+        Order order = orderMapper.toOrder(incomingOrder);
+        Order savedOrder = orderJpaRepo.save(order);
+        return orderMapper.toOrderCreate(savedOrder);
     }
 
     @Override
-    public Order updateOrder(UUID id, Order order) {
-        if (orderJpaRepo.existsById(id)) {
-            order.setId(id);
-            return orderJpaRepo.save(order);
-        }
-        return null;
+    public OrderReadDto updateOrder(UUID id, OrderUpdateDto incomingOrder) {
+        Order existingOrder = orderJpaRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Order not found with id: " + id));
+
+        orderMapper.updateOrderFromDto(incomingOrder, existingOrder);
+
+        Order savedOrder = orderJpaRepo.save(existingOrder);
+
+        return orderMapper.toOrderRead(savedOrder);
     }
 
     @Override

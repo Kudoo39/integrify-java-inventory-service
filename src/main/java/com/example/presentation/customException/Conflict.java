@@ -1,4 +1,4 @@
-package com.example.exception.customException;
+package com.example.presentation.customException;
 
 public class Conflict extends RuntimeException {
     Conflict(String message) {

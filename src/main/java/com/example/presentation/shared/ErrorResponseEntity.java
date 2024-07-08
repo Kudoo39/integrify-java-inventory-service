@@ -1,4 +1,4 @@
-package com.example.exception.shared;
+package com.example.presentation.shared;
 
 import lombok.*;
 
