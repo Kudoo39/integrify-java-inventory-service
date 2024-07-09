@@ -1,52 +1,65 @@
 package com.example.application.supplier;
 
+import com.example.application.dtos.SupplierMapper;
 import com.example.application.dtos.supplierDto.SupplierCreateDto;
 import com.example.application.dtos.supplierDto.SupplierReadDto;
 import com.example.application.dtos.supplierDto.SupplierUpdateDto;
 import com.example.domain.supplier.ISupplierRepo;
+import com.example.domain.supplier.Supplier;
 import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SupplierService implements ISupplierService {
     @Autowired
     private ISupplierRepo supplierRepo;
 
+    @Autowired
+    private SupplierMapper supplierMapper;
+
     @Override
     public List<SupplierReadDto> getAllSuppliers() {
-        return supplierRepo.getAllSuppliers();
+        List<Supplier> suppliers = supplierRepo.getAllSuppliers();
+        return suppliers.stream()
+                .map(supplierMapper::toSupplierRead)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public SupplierCreateDto createSupplier(SupplierCreateDto supplier) {
-        return supplierRepo.createSupplier(supplier);
+    public SupplierCreateDto createSupplier(SupplierCreateDto supplierDto) {
+        Supplier supplier = supplierMapper.toSupplier(supplierDto);
+        Supplier savedSupplier = supplierRepo.createSupplier(supplier);
+        return supplierMapper.toSupplierCreate(savedSupplier);
     }
 
     @Override
     public SupplierReadDto getSupplierById(UUID id) {
-        SupplierReadDto supplier = supplierRepo.getSupplierById(id);
+        Supplier supplier = supplierRepo.getSupplierById(id);
         if (supplier == null) {
             throw new ResourceNotFound("Supplier not found with id: " + id);
         }
-        return supplier;
+        return supplierMapper.toSupplierRead(supplier);
     }
 
     @Override
-    public SupplierReadDto updateSupplier(UUID id, SupplierUpdateDto supplier) {
-        SupplierReadDto existingSupplier = supplierRepo.getSupplierById(id);
+    public SupplierReadDto updateSupplier(UUID id, SupplierUpdateDto supplierDto) {
+        Supplier existingSupplier = supplierRepo.getSupplierById(id);
         if (existingSupplier == null) {
             throw new ResourceNotFound("Supplier not found with id: " + id);
         }
-        return supplierRepo.updateSupplier(id, supplier);
+        supplierMapper.updateSupplierFromDto(supplierDto, existingSupplier);
+        Supplier savedSupplier = supplierRepo.updateSupplier(existingSupplier);
+        return supplierMapper.toSupplierRead(savedSupplier);
     }
 
     @Override
     public void deleteSupplier(UUID id) {
-        SupplierReadDto supplier = supplierRepo.getSupplierById(id);
+        Supplier supplier = supplierRepo.getSupplierById(id);
         if (supplier == null) {
             throw new ResourceNotFound("Supplier not found with id: " + id);
         }

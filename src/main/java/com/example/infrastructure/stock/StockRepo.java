@@ -1,16 +1,10 @@
 package com.example.infrastructure.stock;
 
-import com.example.application.dtos.StockMapper;
-import com.example.application.dtos.stockDto.StockCreateDto;
-import com.example.application.dtos.stockDto.StockReadDto;
-import com.example.application.dtos.stockDto.StockUpdateDto;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
-import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,20 +13,9 @@ public class StockRepo implements IStockRepo {
     @Autowired
     private IStockJpaRepo stockJpaRepo;
 
-    @Autowired
-    private StockMapper stockMapper;
-
     @Override
-    public List<StockReadDto> getAllStocks() {
-        List<Stock> stocks = stockJpaRepo.findAll();
-        List<StockReadDto> stockDtos = new ArrayList<>();
-
-        for (Stock stock : stocks) {
-            StockReadDto stockDto = stockMapper.toStockRead(stock);
-            stockDtos.add(stockDto);
-        }
-
-        return stockDtos;
+    public List<Stock> getAllStocks() {
+        return stockJpaRepo.findAll();
     }
 
     @Override
@@ -41,22 +24,13 @@ public class StockRepo implements IStockRepo {
     }
 
     @Override
-    public StockCreateDto createStock(StockCreateDto incomingStock) {
-        Stock stock = stockMapper.toStock(incomingStock);
-        Stock savedStock = stockJpaRepo.save(stock);
-        return stockMapper.toStockCreate(savedStock);
+    public Stock createStock(Stock stock) {
+        return stockJpaRepo.save(stock);
     }
 
     @Override
-    public StockReadDto updateStock(UUID id, StockUpdateDto incomingStock) {
-        Stock existingStock = stockJpaRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Stock not found with id: " + id));
-
-        stockMapper.updateStockFromDto(incomingStock, existingStock);
-
-        Stock savedStock = stockJpaRepo.save(existingStock);
-
-        return stockMapper.toStockRead(savedStock);
+    public Stock updateStock(Stock stock) {
+        return stockJpaRepo.save(stock);
     }
 
     @Override
@@ -70,12 +44,12 @@ public class StockRepo implements IStockRepo {
     }
 
     @Override
-    public List<Stock> getStocksByProductId(UUID getStocksByProductId) {
-        return stockJpaRepo.getStocksByProductId(getStocksByProductId);
-    };
+    public List<Stock> getStocksByProductId(UUID productId) {
+        return stockJpaRepo.getStocksByProductId(productId);
+    }
 
     @Override
     public List<Stock> getLowStockAlerts(int threshold) {
         return stockJpaRepo.getLowStockAlerts(threshold);
-    };
+    }
 }

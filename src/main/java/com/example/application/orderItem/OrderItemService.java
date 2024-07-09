@@ -1,5 +1,6 @@
 package com.example.application.orderItem;
 
+import com.example.application.dtos.OrderItemMapper;
 import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
 import com.example.application.dtos.orderItemDto.OrderItemReadDto;
 import com.example.application.dtos.orderItemDto.OrderItemUpdateDto;
@@ -11,38 +12,49 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderItemService implements IOrderItemService {
     @Autowired
     private IOrderItemRepo orderItemRepo;
 
+    @Autowired
+    private OrderItemMapper orderItemMapper;
+
     @Override
     public List<OrderItemReadDto> getAllOrderItems() {
-        return orderItemRepo.getAllOrderItems();
+        List<OrderItem> orders = orderItemRepo.getAllOrderItems();
+        return orders.stream()
+                .map(orderItemMapper::toOrderItemRead)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public OrderItemCreateDto createOrderItem(OrderItemCreateDto orderItem) {
-        return orderItemRepo.createOrderItem(orderItem);
+    public OrderItemCreateDto createOrderItem(OrderItemCreateDto orderItemDto) {
+        OrderItem order = orderItemMapper.toOrderItem(orderItemDto);
+        OrderItem savedOrder = orderItemRepo.createOrderItem(order);
+        return orderItemMapper.toOrderItemCreate(savedOrder);
     }
 
     @Override
-    public OrderItem getOrderItemById(UUID id) {
+    public OrderItemReadDto getOrderItemById(UUID id) {
         OrderItem orderItem = orderItemRepo.getOrderItemById(id);
         if (orderItem == null) {
             throw new ResourceNotFound("OrderItem not found with id: " + id);
         }
-        return orderItem;
+        return orderItemMapper.toOrderItemRead(orderItem);
     }
 
     @Override
-    public OrderItemReadDto updateOrderItem(UUID id, OrderItemUpdateDto orderItem) {
+    public OrderItemReadDto updateOrderItem(UUID id, OrderItemUpdateDto orderItemDto) {
         OrderItem existingOrderItem = orderItemRepo.getOrderItemById(id);
         if (existingOrderItem == null) {
             throw new ResourceNotFound("OrderItem not found with id: " + id);
         }
-        return orderItemRepo.updateOrderItem(id, orderItem);
+        orderItemMapper.updateOrderItemFromDto(orderItemDto, existingOrderItem);
+        OrderItem savedOrderItem = orderItemRepo.updateOrderItem(existingOrderItem);
+        return orderItemMapper.toOrderItemRead(savedOrderItem);
     }
 
     @Override
