@@ -33,8 +33,8 @@ public class StockController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Stock> getStockById(@PathVariable UUID id) {
-        Stock stock = stockService.getStockById(id);
+    public ResponseEntity<StockReadDto> getStockById(@PathVariable UUID id) {
+        StockReadDto stock = stockService.getStockById(id);
         return ResponseEntity.ok(stock);
     }
 
@@ -51,20 +51,20 @@ public class StockController {
     }
 
     @GetMapping("/supplier/{supplierId}")
-    public ResponseEntity<List<Stock>> getStocksBySupplierId(@PathVariable UUID supplierId) {
-        List<Stock> stocks = stockService.getStocksBySupplierId(supplierId);
+    public ResponseEntity<List<StockReadDto>> getStocksBySupplierId(@PathVariable UUID supplierId) {
+        List<StockReadDto> stocks = stockService.getStocksBySupplierId(supplierId);
         return ResponseEntity.ok(stocks);
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<Stock>> getStocksByProductId(@PathVariable UUID productId) {
-        List<Stock> stocks = stockService.getStocksByProductId(productId);
+    public ResponseEntity<List<StockReadDto>> getStocksByProductId(@PathVariable UUID productId) {
+        List<StockReadDto> stocks = stockService.getStocksByProductId(productId);
         return ResponseEntity.ok(stocks);
     }
 
-    @GetMapping("/low-stock")
-    public ResponseEntity<List<Stock>> getLowStockAlerts(@RequestParam int threshold) {
-        List<Stock> lowStockItems = stockService.getLowStockAlerts(threshold);
+    @GetMapping("/lowstock")
+    public ResponseEntity<List<StockReadDto>> getLowStockAlerts(@RequestParam(defaultValue = "10") int threshold) {
+        List<StockReadDto> lowStockItems = stockService.getLowStockAlerts(threshold);
         return ResponseEntity.ok(lowStockItems);
     }
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface IOrderItemService {
     public List<OrderItemReadDto> getAllOrderItems();
     public OrderItemCreateDto createOrderItem(OrderItemCreateDto orderItem);
-    public OrderItem getOrderItemById(UUID id);
+    public OrderItemReadDto getOrderItemById(UUID id);
     public OrderItemReadDto updateOrderItem(UUID id, OrderItemUpdateDto orderItem);
     public void deleteOrderItem(UUID id);
 }

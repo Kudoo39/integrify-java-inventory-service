@@ -33,8 +33,8 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable UUID id) {
-        Order order = orderService.getOrderById(id);
+    public ResponseEntity<OrderReadDto> getOrderById(@PathVariable UUID id) {
+        OrderReadDto order = orderService.getOrderById(id);
         return ResponseEntity.ok(order);
     }
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface IOrderService {
     public List<OrderReadDto> getAllOrders();
     public OrderCreateDto createOrder(OrderCreateDto order);
-    public Order getOrderById(UUID id);
+    public OrderReadDto getOrderById(UUID id);
     public OrderReadDto updateOrder(UUID id, OrderUpdateDto order);
     public void deleteOrder(UUID id);
 }
