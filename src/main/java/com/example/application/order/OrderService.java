@@ -8,10 +8,12 @@ import com.example.application.dtos.orderDto.OrderUpdateDto;
 import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
 import com.example.domain.order.IOrderRepo;
 import com.example.domain.order.Order;
+import com.example.domain.orderItem.IOrderItemRepo;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
 import com.example.presentation.customException.OutOfStock;
 import com.example.presentation.customException.ResourceNotFound;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService implements IOrderService{
+    @Autowired
+    private IOrderItemRepo orderItemRepo;
     @Autowired
     private IOrderRepo orderRepo;
 
@@ -42,7 +46,8 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public OrderCreateDto createOrder(OrderCreateDto orderDto) {
+    @Transactional
+    public OrderReadDto createOrder(OrderCreateDto orderDto) {
         for (OrderItemCreateDto item : orderDto.getOrderItems()) {
             Stock stock = stockRepo.getStockById(item.getProductId());
             if (stock == null) {
@@ -54,9 +59,16 @@ public class OrderService implements IOrderService{
             stock.setQuantity(stock.getQuantity() - item.getQuantity());
             stockRepo.updateStock(stock);
         }
+
         Order order = orderMapper.toOrder(orderDto);
+
+        if (order.getOrderDate() == null || order.getStatus() == null || order.getSupplier() == null) {
+            throw new IllegalArgumentException("Order date, status, and supplier ID must not be null");
+        }
+
         Order savedOrder = orderRepo.createOrder(order);
-        return orderMapper.toOrderCreate(savedOrder);
+
+        return orderMapper.toOrderRead(savedOrder);
     }
 
     @Override

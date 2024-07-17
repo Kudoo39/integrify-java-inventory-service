@@ -1,6 +1,9 @@
 package com.example.application.dtos.orderDto;
 
 import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
+import com.example.domain.order.OrderStatus;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,10 +19,11 @@ public class OrderCreateDto {
     private Date orderDate;
 
     @NotNull
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.PROCESSING;
 
     @NotNull
-    private UUID supplierId;
+    private UUID supplierId ;
 
     @NotNull
     private List<OrderItemCreateDto> orderItems;

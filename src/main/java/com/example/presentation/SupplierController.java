@@ -25,8 +25,8 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<SupplierCreateDto> createSupplier(@RequestBody @Valid SupplierCreateDto supplier) {
-        SupplierCreateDto createdSupplier = supplierService.createSupplier(supplier);
+    public ResponseEntity<SupplierReadDto> createSupplier(@RequestBody @Valid SupplierCreateDto supplier) {
+        SupplierReadDto createdSupplier = supplierService.createSupplier(supplier);
         // ResponseEntity.created
         return ResponseEntity.ok(createdSupplier);
     }

@@ -13,5 +13,4 @@ public interface SupplierMapper {
     Supplier toSupplier(SupplierCreateDto incomingSupplier);
     void updateSupplierFromDto(SupplierUpdateDto updateDto, @MappingTarget Supplier supplier);
     SupplierReadDto toSupplierRead(Supplier supplier);
-    SupplierCreateDto toSupplierCreate(Supplier supplier);
 }

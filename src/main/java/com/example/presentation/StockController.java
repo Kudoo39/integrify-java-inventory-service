@@ -26,8 +26,8 @@ public class StockController {
     }
 
     @PostMapping
-    public ResponseEntity<StockCreateDto> createStock(@RequestBody @Valid StockCreateDto stock) {
-        StockCreateDto createdStock = stockService.createStock(stock);
+    public ResponseEntity<StockReadDto> createStock(@RequestBody @Valid StockCreateDto stock) {
+        StockReadDto createdStock = stockService.createStock(stock);
         // created
         return ResponseEntity.ok(createdStock);
     }

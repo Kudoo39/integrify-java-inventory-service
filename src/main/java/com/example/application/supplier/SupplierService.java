@@ -6,11 +6,13 @@ import com.example.application.dtos.supplierDto.SupplierReadDto;
 import com.example.application.dtos.supplierDto.SupplierUpdateDto;
 import com.example.domain.supplier.ISupplierRepo;
 import com.example.domain.supplier.Supplier;
+import com.example.presentation.customException.BadRequest;
 import com.example.presentation.customException.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,10 +33,15 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public SupplierCreateDto createSupplier(SupplierCreateDto supplierDto) {
+    public SupplierReadDto createSupplier(SupplierCreateDto supplierDto) {
+        Optional<Supplier> existingSupplier = supplierRepo.findByEmail(supplierDto.getEmail());
+        if (existingSupplier.isPresent()) {
+            throw new BadRequest("Email " + supplierDto.getEmail() + " already exists!");
+        }
+
         Supplier supplier = supplierMapper.toSupplier(supplierDto);
         Supplier savedSupplier = supplierRepo.createSupplier(supplier);
-        return supplierMapper.toSupplierCreate(savedSupplier);
+        return supplierMapper.toSupplierRead(savedSupplier);
     }
 
     @Override

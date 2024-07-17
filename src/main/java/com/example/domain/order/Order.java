@@ -1,13 +1,13 @@
 package com.example.domain.order;
 
-        import com.example.domain.orderItem.OrderItem;
-        import jakarta.persistence.*;
-        import lombok.*;
-        import com.example.domain.supplier.Supplier;
+import com.example.domain.orderItem.OrderItem;
+import jakarta.persistence.*;
+import lombok.*;
+import com.example.domain.supplier.Supplier;
 
-        import java.util.Date;
-        import java.util.List;
-        import java.util.UUID;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -25,11 +25,12 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private Date orderDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
-    private String status;
+    private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
     @Transient
