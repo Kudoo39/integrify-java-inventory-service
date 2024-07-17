@@ -13,15 +13,12 @@ import org.mapstruct.MappingTarget;
 public interface OrderMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "supplierId", target = "supplier.id")
-    @Mapping(source = "orderItems", target = "orderItems")
     Order toOrder(OrderCreateDto incomingOrder);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "supplierId", target = "supplier.id")
-    @Mapping(source = "orderItems", target = "orderItems")
     void updateOrderFromDto(OrderUpdateDto updateDto, @MappingTarget Order order);
 
     @Mapping(source = "supplier.id", target = "supplierId")
-    @Mapping(source = "orderItems", target = "orderItems")
     OrderReadDto toOrderRead(Order order);
 }

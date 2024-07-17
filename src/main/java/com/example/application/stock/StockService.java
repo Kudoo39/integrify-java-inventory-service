@@ -85,11 +85,12 @@ public class StockService implements IStockService{
     }
 
     @Override
-    public List<StockReadDto> getStocksByProductId(UUID productId) {
-        List<Stock> stocks = stockRepo.getStocksByProductId(productId);
-        return stocks.stream()
-                .map(stockMapper::toStockRead)
-                .collect(Collectors.toList());
+    public StockReadDto getStocksByProductId(UUID productId) {
+        Stock stock = stockRepo.getStocksByProductId(productId);
+        if (stock == null) {
+            throw new ResourceNotFound("Stock not found with product id: " + productId);
+        }
+        return stockMapper.toStockRead(stock);
     }
 
     @Override

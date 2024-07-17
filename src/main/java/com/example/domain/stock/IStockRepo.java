@@ -10,6 +10,6 @@ public interface IStockRepo {
     public Stock updateStock(Stock stock);
     public void deleteStock(UUID id);
     public List<Stock> getStocksBySupplierId(UUID supplierId);
-    public List<Stock> getStocksByProductId(UUID productId);
+    public Stock getStocksByProductId(UUID productId);
     public List<Stock> getLowStockAlerts(int threshold);
 }

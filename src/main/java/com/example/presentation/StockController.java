@@ -57,9 +57,9 @@ public class StockController {
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<StockReadDto>> getStocksByProductId(@PathVariable UUID productId) {
-        List<StockReadDto> stocks = stockService.getStocksByProductId(productId);
-        return ResponseEntity.ok(stocks);
+    public ResponseEntity<StockReadDto> getStocksByProductId(@PathVariable UUID productId) {
+        StockReadDto stock = stockService.getStocksByProductId(productId);
+        return ResponseEntity.ok(stock);
     }
 
     @GetMapping("/lowstock")

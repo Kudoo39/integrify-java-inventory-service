@@ -1,7 +1,7 @@
 package com.example.application.order;
 
+import com.example.application.dtos.OrderItemMapper;
 import com.example.application.dtos.OrderMapper;
-import com.example.application.dtos.StockMapper;
 import com.example.application.dtos.orderDto.OrderCreateDto;
 import com.example.application.dtos.orderDto.OrderReadDto;
 import com.example.application.dtos.orderDto.OrderUpdateDto;
@@ -9,6 +9,7 @@ import com.example.application.dtos.orderItemDto.OrderItemCreateDto;
 import com.example.domain.order.IOrderRepo;
 import com.example.domain.order.Order;
 import com.example.domain.orderItem.IOrderItemRepo;
+import com.example.domain.orderItem.OrderItem;
 import com.example.domain.stock.IStockRepo;
 import com.example.domain.stock.Stock;
 import com.example.presentation.customException.OutOfStock;
@@ -32,7 +33,7 @@ public class OrderService implements IOrderService{
     private IStockRepo stockRepo;
 
     @Autowired
-    private StockMapper stockMapper;
+    private OrderItemMapper orderItemMapper;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -41,7 +42,10 @@ public class OrderService implements IOrderService{
     public List<OrderReadDto> getAllOrders() {
         List<Order> orders = orderRepo.getAllOrders();
         return orders.stream()
-                .map(orderMapper::toOrderRead)
+                .map(order -> {
+                    OrderReadDto orderReadDto = orderMapper.toOrderRead(order);
+                    return orderReadDto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -49,7 +53,7 @@ public class OrderService implements IOrderService{
     @Transactional
     public OrderReadDto createOrder(OrderCreateDto orderDto) {
         for (OrderItemCreateDto item : orderDto.getOrderItems()) {
-            Stock stock = stockRepo.getStockById(item.getProductId());
+            Stock stock = stockRepo.getStocksByProductId(item.getProductId());
             if (stock == null) {
                 throw new ResourceNotFound("Product not found with id: " + item.getProductId());
             }
@@ -67,6 +71,16 @@ public class OrderService implements IOrderService{
         }
 
         Order savedOrder = orderRepo.createOrder(order);
+
+        List<OrderItem> orderItems = orderDto.getOrderItems().stream()
+                .map(itemDto -> {
+                    OrderItem orderItem = orderItemMapper.toOrderItem(itemDto);
+                    orderItem.setOrder(savedOrder);
+                    return orderItem;
+                })
+                .collect(Collectors.toList());
+
+        orderItemRepo.createListOrderItems(orderItems);
 
         return orderMapper.toOrderRead(savedOrder);
     }

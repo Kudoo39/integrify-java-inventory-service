@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface IStockJpaRepo extends JpaRepository<Stock, UUID> {
     public List<Stock> getStocksBySupplierId(UUID supplierId);
-    public List<Stock> getStocksByProductId(UUID productId);
+    public Stock getStocksByProductId(UUID productId);
 
     @Query("SELECT s FROM Stock s WHERE s.quantity < :threshold")
     public List<Stock> getLowStockAlerts(int threshold);

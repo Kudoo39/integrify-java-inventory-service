@@ -44,7 +44,7 @@ public class StockRepo implements IStockRepo {
     }
 
     @Override
-    public List<Stock> getStocksByProductId(UUID productId) {
+    public Stock getStocksByProductId(UUID productId) {
         return stockJpaRepo.getStocksByProductId(productId);
     }
 
