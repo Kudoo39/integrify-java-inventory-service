@@ -36,7 +36,7 @@ public class StockService implements IStockService{
     }
 
     @Override
-    public StockCreateDto createStock(StockCreateDto stockDto) {
+    public StockReadDto createStock(StockCreateDto stockDto) {
         UUID supplierId = stockDto.getSupplierId();
         Supplier supplier = supplierRepo.getSupplierById(supplierId);
         if (supplier == null) {
@@ -44,7 +44,7 @@ public class StockService implements IStockService{
         }
         Stock stock = stockMapper.toStock(stockDto);
         Stock savedStock = stockRepo.createStock(stock);
-        return stockMapper.toStockCreate(savedStock);
+        return stockMapper.toStockRead(savedStock);
     }
 
     @Override

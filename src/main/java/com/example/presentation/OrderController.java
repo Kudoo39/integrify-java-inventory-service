@@ -4,7 +4,6 @@ import com.example.application.dtos.orderDto.OrderCreateDto;
 import com.example.application.dtos.orderDto.OrderReadDto;
 import com.example.application.dtos.orderDto.OrderUpdateDto;
 import com.example.application.order.IOrderService;
-import com.example.domain.order.Order;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +25,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderCreateDto> createOrder(@RequestBody @Valid OrderCreateDto order) {
-        OrderCreateDto createdOrder = orderService.createOrder(order);
+    public ResponseEntity<OrderReadDto> createOrder(@RequestBody @Valid OrderCreateDto order) {
+        OrderReadDto createdOrder = orderService.createOrder(order);
         // created
         return ResponseEntity.ok(createdOrder);
     }

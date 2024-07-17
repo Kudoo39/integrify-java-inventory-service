@@ -10,16 +10,16 @@ import lombok.Setter;
 @Setter
 public class SupplierCreateDto {
     @Size(min = 2, max = 20, message = "should be between 2 and 20")
-    @NotNull
+    @NotNull(message = "Name is required")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Contact details are required")
     private String contactDetails;
 
-    @NotNull
+    @NotNull(message = "Address is required")
     private String address;
 
-    @NotNull
+    @NotNull(message = "Email is required")
     @Email
     private String email;
 }

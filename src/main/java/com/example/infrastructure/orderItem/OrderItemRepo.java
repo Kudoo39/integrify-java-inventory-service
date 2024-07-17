@@ -29,6 +29,11 @@ public class OrderItemRepo implements IOrderItemRepo {
     }
 
     @Override
+    public List<OrderItem> createListOrderItems(List<OrderItem> orderItems) {
+        return orderItemJpaRepo.saveAll(orderItems);
+    }
+
+    @Override
     public OrderItem updateOrderItem(OrderItem orderItem) {
         return orderItemJpaRepo.save(orderItem);
     }

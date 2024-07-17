@@ -31,10 +31,10 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public OrderItemCreateDto createOrderItem(OrderItemCreateDto orderItemDto) {
+    public OrderItemReadDto createOrderItem(OrderItemCreateDto orderItemDto) {
         OrderItem order = orderItemMapper.toOrderItem(orderItemDto);
         OrderItem savedOrder = orderItemRepo.createOrderItem(order);
-        return orderItemMapper.toOrderItemCreate(savedOrder);
+        return orderItemMapper.toOrderItemRead(savedOrder);
     }
 
     @Override
