@@ -1,37 +1,194 @@
-## Inventory Management System Micro-service
+# Inventory Management System Micro-service
 
-This assignment involves building a Spring Boot application for a inventory management.
+This project is a Spring Boot application for inventory management. It includes features for managing suppliers, stocks, orders, and order items. The application also incorporates security measures to restrict unauthorized access.
 
-**Entity Mapping:**
-- Implement JPA entities for each element in the ERD (Supplier, Stock, Order, OrderItem).
-- Define appropriate relationships between entities using annotations (e.g., OneToMany, ManyToOne).
+## Table of Contents
 
-**Inventory Management API:**
-- Implement CRUD operations for all entities.
-- Stock management:
-    - Create new stock entries linked to a specific supplier and product identifier.
-    - Update stock information (quantity, supplier, product identifier).
-    - Retrieve a list of all stock entries, or a specific stock entry by ID.
-    - Filter stock entries by supplier or product identifier.
-    - Consider functionalities for low stock alerts based on predefined thresholds.
-- Order management:
-    - Create new orders with a list of ordered products and quantities.
-    - Implement logic to check stock availability before order confirmation.
-    - Retrieve a list of all orders, or a specific order by ID.
-    - Update order status (e.g., processing, shipped, delivered).
-    - Manage order cancellations.
+1. [Getting Started](#getting-started)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
+4. [Project Structure](#project-structure)
+5. [Security](#security)
+6. [Exception Handling](#exception-handling)
+7. [Entity Relationship Diagram](#entity-relational-diagram)
 
-**Security:**
-- Implement security measures with Spring Security to restrict unauthorised access to API endpoints. Consider using JWT or API Key based authentication for improved security.
+## Getting Started
 
-**Production-Ready Considerations:**
-- Implement error handling and validation for API requests.
-- Consider logging and monitoring functionalities for production environments.
+### Prerequisites
 
-**Additional Functionalities:**
-- **Low Stock Alerts:**
-    - Implement logic to track stock levels and trigger notifications (e.g., email, SMS) when stock falls below a predefined threshold.
-- **Order Status Update:**
-    - When an order status is updated to "Shipped" within your system, trigger a notification process.
-- **Inventory Reports:**
-    - Develop functionalities to generate reports on inventory levels, sales trends, low-performing products, order fulfillment times, and purchase history.
+- Java 21 or higher
+- Maven
+- PostgreSQL
+
+### Installation
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/Kudoo39/integrify-java-inventory-service
+    cd integrify-java-inventory-service
+    ```
+
+2. Configure the `application.properties` file in the `src/main/resources` directory with your database settings.
+
+3. Run the application (ensure your database is running before starting the application)
+
+## Features
+
+The following endpoints are available in the application:
+
+### Orders
+
+- `POST /orders` - Create a new order
+- `GET /orders` - Retrieve all orders
+- `GET /orders/{id}` - Retrieve a specific order by ID
+- `PUT /orders/{id}` - Update an order
+- `DELETE /orders/{id}` - Cancel an order
+
+### Stock
+
+- `POST /stocks` - Create a new stock entry
+- `GET /stocks` - Retrieve all stock entries
+- `GET /stocks/{id}` - Retrieve a specific stock entry by ID
+- `PUT /stocks/{id}` - Update stock information
+- `DELETE /stocks/{id}` - Delete an stock entry
+- `GET /stocks/supplier/{supplierId}` - Retrieve all stock entries by supplier ID
+- `GET /stocks/product/{productId}` - Retrieve a specific stock entry by product ID
+- `GET /stocks/lowstock` - Retrieve all stock entries which are low
+
+### Suppliers
+
+- `POST /suppliers` - Create a new supplier
+- `GET /suppliers` - Retrieve all suppliers
+- `GET /suppliers/{id}` - Retrieve a specific supplier by ID
+- `PUT /suppliers/{id}` - Update supplier information
+- `DELETE /suppliers/{id}` - Delete a supplier
+
+## Technologies Used
+
+- Java
+- Spring Boot
+- Spring Security
+- JPA
+- Maven
+- PostgreSQL
+
+## Project Structure
+
+```
+src
+ ┣ main
+ ┃ ┣ java
+ ┃ ┃ ┗ com
+ ┃ ┃ ┃ ┗ example
+ ┃ ┃ ┃ ┃ ┣ application
+ ┃ ┃ ┃ ┃ ┃ ┣ dtos
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ orderDto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderCreateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderReadDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderUpdateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ orderItemDto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderItemCreateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderItemReadDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderItemUpdateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ stockDto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ StockCreateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ StockReadDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ StockUpdateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ supplierDto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SupplierCreateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SupplierReadDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ SupplierUpdateDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderItemMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ StockMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ SupplierMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┣ order
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderService.java
+ ┃ ┃ ┃ ┃ ┃ ┣ orderItem
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderItemService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderItemService.java
+ ┃ ┃ ┃ ┃ ┃ ┣ stock
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IStockService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ StockService.java
+ ┃ ┃ ┃ ┃ ┃ ┗ supplier
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ISupplierService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ SupplierService.java
+ ┃ ┃ ┃ ┃ ┣ domain
+ ┃ ┃ ┃ ┃ ┃ ┣ order
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ Order.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderStatus.java
+ ┃ ┃ ┃ ┃ ┃ ┣ orderItem
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderItemRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderItem.java
+ ┃ ┃ ┃ ┃ ┃ ┣ stock
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IStockRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ Stock.java
+ ┃ ┃ ┃ ┃ ┃ ┗ supplier
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ISupplierRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ Supplier.java
+ ┃ ┃ ┃ ┃ ┣ infrastructure
+ ┃ ┃ ┃ ┃ ┃ ┣ order
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderJpaRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┣ orderItem
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderItemJpaRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderItemRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┣ stock
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IStockJpaRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ StockRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┗ supplier
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ISupplierJpaRepo.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ SupplierRepo.java
+ ┃ ┃ ┃ ┃ ┣ presentation
+ ┃ ┃ ┃ ┃ ┃ ┣ customException
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ BadRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ Conflict.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ Forbidden.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ OutOfStock.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ResourceNotFound.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ Unauthorized.java
+ ┃ ┃ ┃ ┃ ┃ ┣ security
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ApiKeyFilter.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ JWTService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ SecurityConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┣ shared
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ErrorEntity.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ErrorResponseEntity.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ GlobalExceptionHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┣ OrderController.java
+ ┃ ┃ ┃ ┃ ┃ ┣ OrderItemController.java
+ ┃ ┃ ┃ ┃ ┃ ┣ StockController.java
+ ┃ ┃ ┃ ┃ ┃ ┗ SupplierController.java
+ ┃ ┃ ┃ ┃ ┗ InventoryServiceApplication.java
+ ┃ ┗ resources
+ ┃ ┃ ┣ static
+ ┃ ┃ ┣ templates
+ ┃ ┃ ┣ application.properties
+ ┃ ┃ ┣ env.properties
+ ┃ ┃ ┣ env.properties.example
+ ┃ ┃ ┗ er_diagram.png
+ ┗ test
+ ┃ ┗ java
+ ┃ ┃ ┗ com
+ ┃ ┃ ┃ ┗ example
+ ┃ ┃ ┃ ┃ ┗ inventory_service
+ ┃ ┃ ┃ ┃ ┃ ┗ InventoryServiceApplicationTests.java
+```
+
+## Security
+
+The application uses API key-based authentication to restrict unauthorized access to API endpoints.
+
+### Configuring the API Key
+
+Configure the API key in the `env.properties` file: `API_KEY=your_api_key`
+
+## Exception Handling
+
+Exceptions are handled centrally using custom exception classes defined in the `presentation/customException`. These exceptions are then caught and processed in `presentation/shared/GlobalExceptionHandler.java`.
+
+## Entity Relational Diagram
+
+![Entity Relational Diagram](src/main/resources/er_diagram.png)
