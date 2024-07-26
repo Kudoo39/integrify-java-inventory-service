@@ -63,6 +63,10 @@ The following endpoints are available in the application:
 - `PUT /suppliers/{id}` - Update supplier information
 - `DELETE /suppliers/{id}` - Delete a supplier
 
+### Reporting
+
+- Automated daily reports for inventory and sales.
+
 ## Technologies Used
 
 - Java
@@ -102,14 +106,22 @@ src
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ OrderMapper.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ StockMapper.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┗ SupplierMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┣ notification
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ NotificationService.java
  ┃ ┃ ┃ ┃ ┃ ┣ order
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderService.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderService.java
  ┃ ┃ ┃ ┃ ┃ ┣ orderItem
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ IOrderItemService.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┗ OrderItemService.java
+ ┃ ┃ ┃ ┃ ┃ ┣ report
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ InventoryReport.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ReportService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SalesReport.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ ScheduledTasks.java
  ┃ ┃ ┃ ┃ ┃ ┣ stock
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ IStockService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ LowStockAlertService.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┗ StockService.java
  ┃ ┃ ┃ ┃ ┃ ┗ supplier
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ ISupplierService.java
@@ -168,7 +180,8 @@ src
  ┃ ┃ ┣ application.properties
  ┃ ┃ ┣ env.properties
  ┃ ┃ ┣ env.properties.example
- ┃ ┃ ┗ er_diagram.png
+ ┃ ┃ ┣ er_diagram.png
+ ┃ ┃ ┗ logback-spring.xml
  ┗ test
  ┃ ┗ java
  ┃ ┃ ┗ com
